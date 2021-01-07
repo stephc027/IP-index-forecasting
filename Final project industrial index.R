@@ -4,7 +4,7 @@ library(gridExtra)
 library(readxl)
 library(tseries)
 
-setwd("C:/Users/sscha/Documents/Code")
+#setwd("C:/Users/sscha/Documents/Code")
 #To run code: Modify setwd function if needed, otherwise leave commented out.
 
 #Load IP Index Data (100 yr)
