@@ -61,10 +61,10 @@ kpss.test(d_ii20)
 
 #The data does not look particularly stationary.  It does pass the kpss test, and R is not recommending further differencing.  Exploration of the plots at one more difference at lag one may provide a more stationary-looking series:
 
-
-diff_ii20<- sdiff_ii20 %>% diff(lag=1)
+diff_ii20<- d_ii20 %>% diff(lag=1)
 kpss.test(diff_ii20)
 tsdisplay(diff_ii20,main="Differenced data")
+
 
 #The data looks more stationary now.  There are significant non-seasonal lags at 2,3, and possibly 4-5 in the ACF and 2-3 in the PACF, as well as seasonal lags in both at at 12, and PACF at 24, indicating there will be a seasonal component, likely with an order of 1 or 2. 
 
@@ -193,17 +193,13 @@ autoplot(ii_20) + autolayer(fitted(fit_stlf),series="STL + ETS(M,Ad,N)") + autol
 #Each model fits certain events better, though ARIMA is slightly better overall according to RMSE. However, this does not indicate predictive accuracy.  Each model will be re-assessed for how they handle the sudden drops in 2008 and 2020, based on prior information, by changing the training and test sets.  For 2008, a year of forecasts will be examined as this was the approximate period of the recession.  For 2020, 6 month predictions will be made based on information through January 2020 will be compared to the actual data from February and March.
 
 
-faa(train1,h=12) %>% autoplot() + autolayer(test1,series="Actual")
-stlf(train1,h=12) %>% autoplot() + autolayer(test1,series="Actual")
-#Both models do very poorly with this data.  The training set is relatively small and though there was a slight dip between 2000 and 2002, the drop was unprecedented within the training data.  Also, September is generally a high month for IP index, so it is unsurprising that forecasts do not capture the recession.  It is notable, however, that the actual data is so far out of range that even 95% confidence intervals do not coincide with any of the year’s data.  This illustrates a situation for which confidence intervals are not reliable, because they do not account for un-predictable factors outside of the scope of the model’s training (here, the mortgage crisis).
-fc1aa<-faa(train1,h=12)
-fc1stlf<-stlf(train1,h=12)
-
-
 train1<-window(ii_20,end=c(2008,8))
 test1<-window(ii_20,start=c(2008,9),end=c(2009,10))
 fc1aa<-faa(train1,h=12)
 fc1stlf<-stlf(train1,h=12)
+#Both models do very poorly with this data.  The training set is relatively small and though there was a slight dip between 2000 and 2002, the drop was unprecedented within the training data.  Also, September is generally a high month for IP index, so it is unsurprising that forecasts do not capture the recession.  It is notable, however, that the actual data is so far out of range that even 95% confidence intervals do not coincide with any of the year’s data.  This illustrates a situation for which confidence intervals are not reliable, because they do not account for un-predictable factors outside of the scope of the model’s training (here, the mortgage crisis).
+faa(train1,h=12) %>% autoplot() + autolayer(test1,series="Actual")
+stlf(train1,h=12) %>% autoplot() + autolayer(test1,series="Actual")
 
 accuracy(fc1aa,test1)
 accuracy(fc1stlf,test1)
