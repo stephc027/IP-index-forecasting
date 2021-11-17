@@ -8,4 +8,3 @@ A comparison of forecasting methods (STL + ETS vs. ARIMA) on robustness to sudde
 Data sourced from the United States Federal Reserve public access data repository: https://www.federalreserve.gov/releases/g17/current/
 
 
-2021 prediction follow up coming soon!
